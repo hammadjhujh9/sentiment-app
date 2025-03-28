@@ -1,0 +1,115 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentence Share</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            background: #f0f2f5; 
+            margin: 0; 
+            padding: 20px;
+        }
+        .container { 
+            max-width: 800px; 
+            margin: 0 auto; 
+        }
+        .header { 
+            background: white; 
+            padding: 15px 20px; 
+            border-radius: 8px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .header h1 { 
+            margin: 0; 
+            color: #1877f2; 
+            display: inline-block;
+        }
+        .logout { 
+            float: right; 
+            padding: 8px 15px; 
+            background: #ff6f91; 
+            color: white; 
+            text-decoration: none; 
+            border-radius: 5px;
+        }
+        .post-form { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 8px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+            margin-bottom: 20px;
+        }
+        .post-form textarea { 
+            width: 100%; 
+            padding: 10px; 
+            border: 1px solid #ddd; 
+            border-radius: 5px; 
+            resize: vertical;
+        }
+        .post-form button { 
+            background: #1877f2; 
+            color: white; 
+            border: none; 
+            padding: 8px 15px; 
+            border-radius: 5px; 
+            cursor: pointer;
+        }
+        .sentence-post { 
+            background: white; 
+            padding: 15px; 
+            border-radius: 8px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+            margin-bottom: 15px;
+        }
+        .username { 
+            color: #1877f2; 
+            font-weight: bold; 
+            margin-right: 10px;
+        }
+        .created_at { 
+            color: #65676b; 
+            font-size: 0.9em;
+        }
+        .sentiment { 
+            float: right; 
+            padding: 2px 8px; 
+            border-radius: 10px; 
+            font-size: 0.8em;
+        }
+        .sentiment.positive { background: #e7f3ff; color: #1877f2; }
+        .sentiment.negative { background: #ffe7e7; color: #dc3545; }
+        .sentiment.neutral { background: #f0f0f0; color: #666; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Sentence Share</h1>
+            <a href="/logout/" class="logout">Sign Out</a>
+        </div>
+
+        <div class="post-form">
+            <form method="POST" action="/upload/">
+                {% csrf_token %}
+                <textarea name="text" placeholder="What's on your mind, {{ username }}?" rows="3" required></textarea>
+                <button type="submit">Post</button>
+            </form>
+        </div>
+
+        {% for sentence in sentences %}
+            <div class="sentence-post">
+                <div>
+                    <span class="username">{{ sentence.user.username }}</span>
+                    <span class="created_at">{{ sentence.created_at }}</span>
+                    <span class="sentiment {{ sentence.sentiment }}">{{ sentence.sentiment }}</span>
+                </div>
+                <p>{{ sentence.text }}</p>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
